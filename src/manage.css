@@ -1,52 +1,57 @@
 :root {
-  /* Atom One Light surface */
-  --bg: #fafafa;
-  --fg: #383a42;
-  --muted: #a0a1a7;
-  --border: #e1e1e6;
-  --row-hover: #f0f0f1;
+  /* Tokyo Night Day surface */
+  --bg: #e1e2e7;
+  --fg: #343b58;
+  --muted: #848cb5;
+  --placeholder: #9da3c3;
+  --border: #c4c8da;
+  --row-hover: #d5d6db;
 
-  /* Neutral button (charcoal) */
-  --btn-bg: #383a42;
-  --btn-fg: #fafafa;
-  --btn-hover: #4f5260;
+  /* Tokyo Night Day blue accent */
+  --accent: #2e7de9;
+  --accent-hover: #1a5fc2;
+  --focus-ring: rgba(46, 125, 233, 0.25);
 
-  /* Atom One cyan accent */
-  --accent: #0184bc;
-  --accent-hover: #016a99;
-  --focus-ring: rgba(1, 132, 188, 0.25);
+  /* Button uses accent */
+  --btn-bg: var(--accent);
+  --btn-fg: #ffffff;
+  --btn-hover: var(--accent-hover);
 
-  --danger: #e45649;
+  --danger: #f52a65;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Atom One Dark surface */
-    --bg: #282c34;
-    --fg: #abb2bf;
-    --muted: #5c6370;
-    --border: #3e4451;
-    --row-hover: #2c313a;
+    /* Tokyo Night surface */
+    --bg: #16161e;
+    --fg: #c0caf5;
+    --muted: #565f89;
+    --placeholder: #545c7e;
+    --border: #292e42;
+    --row-hover: #292e42;
 
-    /* Neutral button (light on dark) */
-    --btn-bg: #abb2bf;
-    --btn-fg: #282c34;
-    --btn-hover: #c8cdd5;
+    /* Tokyo Night signature blue */
+    --accent: #7aa2f7;
+    --accent-hover: #99b8fa;
+    --focus-ring: rgba(122, 162, 247, 0.28);
 
-    /* Atom One cyan accent (lighter for dark bg) */
-    --accent: #56b6c2;
-    --accent-hover: #7cc7d1;
-    --focus-ring: rgba(86, 182, 194, 0.28);
+    /* Button uses accent. Dark text on light blue reads best. */
+    --btn-bg: var(--accent);
+    --btn-fg: #1a1b26;
+    --btn-hover: var(--accent-hover);
 
-    --danger: #e06c75;
+    --danger: #f7768e;
   }
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   background: var(--bg);
   color: var(--fg);
 }
@@ -123,6 +128,11 @@ input[type="text"]:focus {
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
+input[type="text"]::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
 button {
   padding: 8px 14px;
   border: none;
@@ -136,7 +146,9 @@ button {
   transition: background-color 150ms ease;
 }
 
-button:hover { background: var(--btn-hover); }
+button:hover {
+  background: var(--btn-hover);
+}
 
 button:disabled {
   opacity: 0.5;
@@ -205,16 +217,28 @@ button.icon-btn svg {
   height: 100%;
   width: 0%;
   background: var(--accent);
-  transition: width 200ms ease, background-color 200ms ease;
+  transition:
+    width 200ms ease,
+    background-color 200ms ease;
 }
 
-.counter.warn { color: #b45309; }
-.counter.warn .counter-fill { background: #f59e0b; }
-.counter.danger { color: var(--danger); }
-.counter.danger .counter-fill { background: var(--danger); }
+.counter.warn {
+  color: #b45309;
+}
+.counter.warn .counter-fill {
+  background: #f59e0b;
+}
+.counter.danger {
+  color: var(--danger);
+}
+.counter.danger .counter-fill {
+  background: var(--danger);
+}
 
 @media (prefers-color-scheme: dark) {
-  .counter.warn { color: #fbbf24; }
+  .counter.warn {
+    color: #fbbf24;
+  }
 }
 
 table {
@@ -223,7 +247,8 @@ table {
   font-size: 14px;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 10px 8px;
   border-bottom: 1px solid var(--border);
@@ -237,7 +262,9 @@ th {
   letter-spacing: 0.04em;
 }
 
-tbody tr:hover { background: var(--row-hover); }
+tbody tr:hover {
+  background: var(--row-hover);
+}
 
 td.code-cell {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
