@@ -18,6 +18,10 @@
   --btn-hover: var(--accent-hover);
 
   --danger: #f52a65;
+
+  /* Tokyo Night Day orange — notice/warn accent */
+  --notice: #b15c00;
+  --notice-bg: rgba(177, 92, 0, 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +45,10 @@
     --btn-hover: var(--accent-hover);
 
     --danger: #f7768e;
+
+    /* Tokyo Night orange — notice/warn accent */
+    --notice: #ff9e64;
+    --notice-bg: rgba(255, 158, 100, 0.14);
   }
 }
 
@@ -185,6 +193,17 @@ button.icon-btn svg {
 .error {
   margin: 8px 0 0;
   color: var(--danger);
+  font-size: 13px;
+}
+
+.notice {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--notice);
+  border-left-width: 4px;
+  border-radius: 6px;
+  background: var(--notice-bg);
+  color: var(--fg);
   font-size: 13px;
 }
 

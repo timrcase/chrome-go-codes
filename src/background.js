@@ -23,6 +23,10 @@ chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
   const url = stored[code];
   if (!url) {
     console.log(`[go-codes] no mapping for "${code}"`);
+    const manageUrl = chrome.runtime.getURL(
+      `${MANAGE_PAGE}?invalid=true&code=${encodeURIComponent(code)}`,
+    );
+    await chrome.tabs.create({ url: manageUrl, active: true });
     return;
   }
 

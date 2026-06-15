@@ -15,8 +15,28 @@ const errorMsg = document.getElementById("error");
 const counterEl = document.querySelector(".counter");
 const counterText = document.getElementById("counter-text");
 const counterFill = document.getElementById("counter-fill");
+const noticeEl = document.getElementById("notice");
 
 const isChromeStorage = typeof chrome !== "undefined" && chrome.storage?.sync;
+
+function handleInvalidCode() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("invalid") !== "true") return;
+
+  const code = normalizeCode(params.get("code") || "");
+  if (code) {
+    codeInput.value = code;
+    urlInput.focus();
+    noticeEl.textContent = `"${code}" isn't assigned yet. Add a URL to create it.`;
+  } else {
+    codeInput.focus();
+    noticeEl.textContent = "That code isn't assigned yet. Add it below.";
+  }
+  noticeEl.hidden = false;
+
+  // Strip params so a refresh doesn't re-trigger the notice.
+  history.replaceState(null, "", window.location.pathname);
+}
 
 function showError(msg) {
   errorMsg.textContent = msg;
@@ -174,6 +194,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   await addCode(code, url);
+  noticeEl.hidden = true;
   codeInput.value = "";
   urlInput.value = "";
   codeInput.focus();
@@ -186,3 +207,4 @@ if (isChromeStorage) {
 }
 
 refresh();
+handleInvalidCode();
