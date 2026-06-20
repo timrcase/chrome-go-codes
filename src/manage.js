@@ -21,7 +21,7 @@ const isChromeStorage = typeof chrome !== "undefined" && chrome.storage?.sync;
 
 function handleInvalidCode() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("invalid") !== "true") return;
+  if (params.get("invalid") !== "true") return false;
 
   const code = normalizeCode(params.get("code") || "");
   if (code) {
@@ -36,6 +36,7 @@ function handleInvalidCode() {
 
   // Strip params so a refresh doesn't re-trigger the notice.
   history.replaceState(null, "", window.location.pathname);
+  return true;
 }
 
 function showError(msg) {
@@ -60,6 +61,8 @@ function normalizeUrl(raw) {
   }
   try {
     const u = new URL(v);
+    // Only http(s) — block javascript:, data:, file:, etc.
+    if (u.protocol !== "http:" && u.protocol !== "https:") return null;
     // Keep template placeholders ({1}, {*}) readable — URL() encodes braces.
     return u.toString().replace(/%7B/gi, "{").replace(/%7D/gi, "}");
   } catch {
@@ -83,8 +86,7 @@ function updateCounter(count) {
   counterText.textContent = `${count} / ${MAX_CODES}`;
   counterFill.style.width = `${pct}%`;
   counterEl.classList.remove("warn", "danger");
-  if (count >= MAX_CODES) counterEl.classList.add("danger");
-  else if (count >= MAX_CODES * 0.9) counterEl.classList.add("danger");
+  if (count >= MAX_CODES * 0.9) counterEl.classList.add("danger");
   else if (count >= MAX_CODES * 0.8) counterEl.classList.add("warn");
 
   const atLimit = count >= MAX_CODES;
@@ -167,9 +169,16 @@ async function refresh() {
 async function addCode(code, url) {
   if (!isChromeStorage) {
     showError("chrome.storage unavailable (not running as extension).");
-    return;
+    return false;
   }
-  await chrome.storage.sync.set({ [code]: url });
+  try {
+    await chrome.storage.sync.set({ [code]: url });
+    return true;
+  } catch (err) {
+    // Per-item byte cap (long URL) or write rate limit.
+    showError(`Couldn't save: ${err?.message || "storage error"}`);
+    return false;
+  }
 }
 
 async function deleteCode(code) {
@@ -212,7 +221,7 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  await addCode(code, url);
+  if (!(await addCode(code, url))) return;
   noticeEl.hidden = true;
   codeInput.value = "";
   urlInput.value = "";
@@ -253,5 +262,5 @@ async function maybeAutoShow() {
 }
 
 refresh();
-handleInvalidCode();
-maybeAutoShow();
+// Don't auto-pop the modal over the invalid-code notice.
+if (!handleInvalidCode()) maybeAutoShow();

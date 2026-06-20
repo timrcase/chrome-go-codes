@@ -59,7 +59,6 @@ chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
   const stored = await chrome.storage.sync.get(code);
   const template = stored[code];
   if (!template) {
-    console.log(`[go-codes] no mapping for "${code}"`);
     const manageUrl = chrome.runtime.getURL(
       `${MANAGE_PAGE}?invalid=true&code=${encodeURIComponent(code)}`,
     );

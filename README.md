@@ -8,7 +8,7 @@ Type `go` in the address bar, hit space (or tab), enter a short code, press Ente
 
 - **Omnibox keyword**: `go <code>` jumps to the mapped URL.
 - **Sync across devices**: stored in `chrome.storage.sync` (one key per code).
-- **Manage page**: click the toolbar icon to add, edit, or delete codes.
+- **Manage page**: click the toolbar icon to add or delete codes (re-adding a code overwrites it).
 - **500-code limit** with live counter, progress bar, and color-coded warning thresholds.
 - **System theme aware**: light/dark mode follows `prefers-color-scheme`.
 - **Minimal permissions**: only `storage`. No tab tracking, no host permissions.
@@ -54,7 +54,7 @@ src/
 ├── manifest.json       MV3 manifest, omnibox + action config
 ├── background.js       Service worker: omnibox handler, toolbar click handler
 ├── manage.html         Manage UI markup
-├── manage.css          Atom One palette + cyan accent
+├── manage.css          Tokyo Night palette + blue accent
 ├── manage.js           CRUD logic against chrome.storage.sync
 └── icons/              16/48/128 PNGs
 ```
@@ -79,7 +79,7 @@ The extension caps users at 500 codes, leaving headroom.
 
 ## Design notes
 
-- **Color**: Atom One palette (`#fafafa`/`#383a42` light, `#282c34`/`#abb2bf` dark) with cyan (`#0184bc`/`#56b6c2`) accent on focus rings, link hover, and progress fill. Buttons stay neutral charcoal.
+- **Color**: Tokyo Night palette (`#e1e2e7`/`#343b58` light, `#16161e`/`#c0caf5` dark) with blue (`#2e7de9`/`#7aa2f7`) accent on focus rings, link hover, progress fill, and buttons. Light/dark follows `prefers-color-scheme`.
 - **Font**: system UI stack (zero bytes shipped).
 - **No build step**: plain HTML/CSS/JS loaded directly.
 
