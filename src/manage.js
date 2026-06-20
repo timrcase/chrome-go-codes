@@ -60,7 +60,8 @@ function normalizeUrl(raw) {
   }
   try {
     const u = new URL(v);
-    return u.toString();
+    // Keep template placeholders ({1}, {*}) readable — URL() encodes braces.
+    return u.toString().replace(/%7B/gi, "{").replace(/%7D/gi, "}");
   } catch {
     return null;
   }
@@ -79,7 +80,7 @@ async function loadCodes() {
 
 function updateCounter(count) {
   const pct = Math.min(100, (count / MAX_CODES) * 100);
-  counterText.textContent = `${count} / ${MAX_CODES} codes`;
+  counterText.textContent = `${count} / ${MAX_CODES}`;
   counterFill.style.width = `${pct}%`;
   counterEl.classList.remove("warn", "danger");
   if (count >= MAX_CODES) counterEl.classList.add("danger");
@@ -107,7 +108,10 @@ function render(codes) {
 
     const codeTd = document.createElement("td");
     codeTd.className = "code-cell";
-    codeTd.textContent = code;
+    const codeChip = document.createElement("span");
+    codeChip.className = "code-chip";
+    codeChip.textContent = code;
+    codeTd.appendChild(codeChip);
 
     const urlTd = document.createElement("td");
     urlTd.className = "url-cell";
@@ -115,7 +119,18 @@ function render(codes) {
     a.href = url;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.textContent = url;
+    // Highlight {1}, {2}… placeholders within the URL.
+    for (const part of url.split(/(\{\d+\})/)) {
+      if (!part) continue;
+      if (/^\{\d+\}$/.test(part)) {
+        const v = document.createElement("span");
+        v.className = "var";
+        v.textContent = part;
+        a.appendChild(v);
+      } else {
+        a.appendChild(document.createTextNode(part));
+      }
+    }
     urlTd.appendChild(a);
 
     const actionsTd = document.createElement("td");
@@ -175,6 +190,10 @@ form.addEventListener("submit", async (e) => {
     showError("Code cannot contain spaces.");
     return;
   }
+  if (code.includes("/")) {
+    showError("Code cannot contain a slash — it separates the code from variables.");
+    return;
+  }
   if (isMetaKey(code)) {
     showError("Code cannot start with an underscore.");
     return;
@@ -206,5 +225,33 @@ if (isChromeStorage) {
   });
 }
 
+// How-it-works modal. Meta key "_hiwDismissed" hides the auto-open on load.
+const HIW_KEY = "_hiwDismissed";
+const hiwModal = document.getElementById("hiw-modal");
+const hiwBtn = document.getElementById("how-it-works");
+const hiwGotIt = document.getElementById("hiw-got-it");
+const hiwDontShow = document.getElementById("hiw-dont-show");
+
+hiwBtn.addEventListener("click", () => hiwModal.showModal());
+
+// Close when clicking the backdrop (outside the dialog box).
+hiwModal.addEventListener("click", (e) => {
+  if (e.target === hiwModal) hiwModal.close();
+});
+
+hiwGotIt.addEventListener("click", async () => {
+  if (hiwDontShow.checked && isChromeStorage) {
+    await chrome.storage.sync.set({ [HIW_KEY]: true });
+  }
+  hiwModal.close();
+});
+
+async function maybeAutoShow() {
+  if (!isChromeStorage) return;
+  const stored = await chrome.storage.sync.get(HIW_KEY);
+  if (!stored[HIW_KEY]) hiwModal.showModal();
+}
+
 refresh();
 handleInvalidCode();
+maybeAutoShow();

@@ -9,31 +9,50 @@
   <main>
     <header>
       <div class="brand">
-        <img src="icons/icon128.png" alt="" class="brand-icon" width="40" height="40">
-        <h1>Go Codes</h1>
+        <img src="icons/icon128.png" alt="" class="brand-icon" width="48" height="48">
+        <div class="brand-text">
+          <h1>Go Codes</h1>
+          <p class="tagline">Jump to any URL with a short keyword.</p>
+        </div>
       </div>
-      <p class="hint">Type <code>go &lt;code&gt;</code> in the address bar to jump to a URL.</p>
+      <button type="button" id="how-it-works" class="ghost-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        How it works
+      </button>
     </header>
 
     <p id="notice" class="notice" role="alert" hidden></p>
 
-    <section class="add-row">
+    <section class="card add-card">
+      <h2 class="card-title">Add a code</h2>
       <form id="add-form">
-        <input id="code-input" type="text" placeholder="shortcode (e.g. gh)" autocomplete="off" required>
-        <input id="url-input" type="text" placeholder="https://github.com" autocomplete="off" required>
+        <input id="code-input" type="text" placeholder="shortcode" autocomplete="off" required>
+        <input id="url-input" type="text" placeholder="https://example.com/{1}" autocomplete="off" required>
         <button type="submit">Add</button>
       </form>
       <p id="error" class="error" hidden></p>
-    </section>
 
-    <section class="counter-row" aria-live="polite">
-      <div class="counter">
-        <span id="counter-text">0 / 500 codes</span>
-        <div class="counter-bar"><div id="counter-fill" class="counter-fill"></div></div>
+      <div class="vars-hint">
+        <span class="vars-icon" aria-hidden="true">{&nbsp;}</span>
+        <p>
+          <strong>Need part of the URL to change each time?</strong> Use <code>{1}</code> and <code>{2}</code> as fill-in slots.<br>
+          Save <code>github.com/<span class="var">{1}</span>/<span class="var">{2}</span></code>, then type <code>go gh/<span class="var">acme</span>/<span class="var">web</span></code> to open <code>github.com/<span class="var">acme</span>/<span class="var">web</span></code>.
+        </p>
       </div>
     </section>
 
-    <section>
+    <section class="saved">
+      <div class="saved-head">
+        <h2 class="card-title">Saved codes</h2>
+        <div class="counter" aria-live="polite">
+          <span id="counter-text">0 / 500</span>
+          <div class="counter-bar"><div id="counter-fill" class="counter-fill"></div></div>
+        </div>
+      </div>
       <table id="codes-table">
         <thead>
           <tr>
@@ -46,6 +65,49 @@
       </table>
       <p id="empty" class="empty" hidden>No codes yet. Add one above.</p>
     </section>
+
+    <dialog id="hiw-modal" class="modal">
+      <div class="modal-head">
+        <span class="modal-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </span>
+        <h2>How Go Codes works</h2>
+      </div>
+
+      <div class="omnibox">
+        <svg class="omnibox-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="omnibox-chip">go</span>
+        <span class="omnibox-typed">gh</span>
+        <span class="omnibox-caret" aria-hidden="true"></span>
+        <span class="omnibox-aside">in the address bar</span>
+      </div>
+
+      <p class="modal-jump">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19 12 12 19 5 12"/>
+        </svg>
+        Jumps straight to <code>github.com</code> — no clicks, no bookmarks.
+      </p>
+
+      <div class="modal-tip">
+        <strong>Tip:</strong> add <code><span class="var">/var1/var2</span></code> after a code to fill in variables on the fly.
+      </div>
+
+      <div class="modal-foot">
+        <label class="dont-show">
+          <input type="checkbox" id="hiw-dont-show">
+          Don't show this again
+        </label>
+        <button type="button" id="hiw-got-it">Got it</button>
+      </div>
+    </dialog>
   </main>
 
   <script src="manage.js"></script>
