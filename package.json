@@ -1,0 +1,14 @@
+{
+  "name": "go-codes",
+  "private": true,
+  "description": "Omnibox shortcodes for URLs, synced via Chrome.",
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild build/material-entry.js --bundle --format=esm --minify --outfile=src/vendor/material.js",
+    "watch": "esbuild build/material-entry.js --bundle --format=esm --outfile=src/vendor/material.js --watch"
+  },
+  "devDependencies": {
+    "@material/web": "^2.4.0",
+    "esbuild": "^0.25.0"
+  }
+}

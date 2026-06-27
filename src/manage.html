@@ -2,81 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Go Codes</title>
   <link rel="stylesheet" href="manage.css">
+  <script type="module" src="vendor/material.js"></script>
 </head>
 <body>
-  <main>
-    <header>
+  <header class="top-app-bar">
+    <div class="bar-inner">
       <div class="brand">
-        <img src="icons/icon128.png" alt="" class="brand-icon" width="48" height="48">
+        <span class="brand-mark" aria-hidden="true">
+          <!-- Material Symbols "bolt_boost" -->
+          <svg viewBox="0 -960 960 960" fill="currentColor">
+            <path d="m520-120 40-280H319l321-440h40l-40 280h241L560-120h-40ZM120-240v-80h348l-12 80H120ZM80-440v-80h228l-58 80H80Zm80-200v-80h294l-58 80H160Z"/>
+          </svg>
+        </span>
         <div class="brand-text">
-          <h1>Go Codes</h1>
-          <p class="tagline">Jump to any URL with a short keyword.</p>
+          <span class="brand-name md-typescale-title-large">Go Codes</span>
+          <p class="brand-tagline md-typescale-body-small">Jump to any URL with a short keyword.</p>
         </div>
+        <md-icon-button id="how-it-works" aria-label="How it works" title="How it works">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </md-icon-button>
       </div>
-      <button type="button" id="how-it-works" class="ghost-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        How it works
-      </button>
-    </header>
+      <section class="usage-card" aria-live="polite">
+        <div class="usage-row">
+          <span class="usage-label md-typescale-label-large">Usage Limit</span>
+          <span id="counter-text" class="usage-value md-typescale-label-large">0 / 500</span>
+        </div>
+        <md-linear-progress id="counter-fill" value="0" aria-label="Codes used"></md-linear-progress>
+      </section>
+    </div>
+  </header>
 
-    <p id="notice" class="notice" role="alert" hidden></p>
+  <main>
+    <p id="notice" class="notice md-typescale-body-medium" role="alert" hidden></p>
 
-    <section class="card add-card">
-      <h2 class="card-title">Add a code</h2>
-      <form id="add-form">
-        <input id="code-input" type="text" placeholder="shortcode" autocomplete="off" required>
-        <input id="url-input" type="text" placeholder="https://example.com/{1}" autocomplete="off" required>
-        <button type="submit">Add</button>
-      </form>
-      <p id="error" class="error" hidden></p>
+    <div class="grid">
+      <section class="card add-card">
+        <h2 class="card-title md-typescale-title-large">Add a code</h2>
+        <form id="add-form">
+          <div class="fields">
+            <md-outlined-text-field
+              id="code-input"
+              class="field-code"
+              label="Shortcode"
+              placeholder="e.g. docs"
+              autocomplete="off"></md-outlined-text-field>
+            <md-outlined-text-field
+              id="url-input"
+              class="field-url"
+              label="Target URL"
+              placeholder="https://google.com/{1}"
+              autocomplete="off"></md-outlined-text-field>
+            <md-filled-button id="add-btn" type="submit">Add</md-filled-button>
+          </div>
+        </form>
+        <p id="error" class="error md-typescale-body-small" hidden></p>
+      </section>
 
-      <div class="vars-hint">
-        <span class="vars-icon" aria-hidden="true">{&nbsp;}</span>
-        <p>
-          <strong>Need part of the URL to change each time?</strong> Use <code>{1}</code> and <code>{2}</code> as fill-in slots.<br>
-          Save <code>github.com/<span class="var">{1}</span>/<span class="var">{2}</span></code>, then type <code>go gh/<span class="var">acme</span>/<span class="var">web</span></code> to open <code>github.com/<span class="var">acme</span>/<span class="var">web</span></code>.
+      <aside class="card smart-card">
+        <div class="smart-head">
+          <span class="smart-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </span>
+          <h2 class="md-typescale-title-large">Smart Variables</h2>
+        </div>
+        <p class="smart-body md-typescale-body-medium">
+          Use <code class="var-chip">{1}</code> and <code class="var-chip">{2}</code> as fill-in slots for dynamic routing.
         </p>
-      </div>
-    </section>
+        <md-divider class="smart-divider"></md-divider>
+        <p class="smart-example md-typescale-body-small">
+          Example: <em>go docs/api → opens your-url.com/api</em>
+        </p>
+      </aside>
+    </div>
 
-    <section class="saved">
+    <section class="card saved-card">
       <div class="saved-head">
-        <h2 class="card-title">Saved codes</h2>
-        <div class="counter" aria-live="polite">
-          <span id="counter-text">0 / 500</span>
-          <div class="counter-bar"><div id="counter-fill" class="counter-fill"></div></div>
+        <h2 class="md-typescale-title-large">Saved Codes</h2>
+        <div class="saved-tools">
+          <md-icon-button id="filter-btn" aria-label="Toggle sort order" title="Sort A→Z / Z→A">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="7" y1="12" x2="17" y2="12"/>
+              <line x1="10" y1="18" x2="14" y2="18"/>
+            </svg>
+          </md-icon-button>
+          <md-icon-button id="search-btn" aria-label="Search codes" title="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </md-icon-button>
         </div>
       </div>
+
+      <div id="search-wrap" class="search-wrap" hidden>
+        <div class="search-bar" role="search">
+          <svg class="search-leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input id="search-input" type="text" class="search-field" placeholder="Search by code or URL" autocomplete="off" aria-label="Search saved codes">
+          <md-icon-button id="search-clear" aria-label="Clear and close search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </md-icon-button>
+        </div>
+      </div>
+
+      <md-divider></md-divider>
+
       <table id="codes-table">
         <thead>
           <tr>
-            <th>Code</th>
-            <th>URL</th>
-            <th></th>
+            <th class="th-code">Code</th>
+            <th class="th-url">URL Destination</th>
+            <th class="th-actions">Actions</th>
           </tr>
         </thead>
         <tbody id="codes-body"></tbody>
       </table>
-      <p id="empty" class="empty" hidden>No codes yet. Add one above.</p>
-    </section>
+      <p id="empty" class="empty md-typescale-body-medium" hidden>No codes yet. Add one above.</p>
 
-    <dialog id="hiw-modal" class="modal">
-      <div class="modal-head">
-        <span class="modal-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </span>
-        <h2>How Go Codes works</h2>
+      <div class="saved-foot">
+        <md-text-button id="view-all" hidden></md-text-button>
       </div>
+    </section>
+  </main>
 
+  <md-dialog id="hiw-modal" class="hiw-dialog">
+    <div slot="headline" class="hiw-headline">
+      <span class="hiw-icon" aria-hidden="true">
+        <!-- Material Symbols "help" (filled) -->
+        <svg viewBox="0 -960 960 960" fill="currentColor">
+          <path d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
+        </svg>
+      </span>
+      How Go Codes works
+    </div>
+
+    <form slot="content" id="hiw-form" method="dialog" class="hiw-content">
       <div class="omnibox">
         <svg class="omnibox-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/>
@@ -88,7 +164,7 @@
         <span class="omnibox-aside">in the address bar</span>
       </div>
 
-      <p class="modal-jump">
+      <p class="modal-jump md-typescale-body-large">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <polyline points="19 12 12 19 5 12"/>
@@ -96,19 +172,20 @@
         Jumps straight to <code>github.com</code> — no clicks, no bookmarks.
       </p>
 
-      <div class="modal-tip">
+      <div class="modal-tip md-typescale-body-medium">
         <strong>Tip:</strong> add <code><span class="var">/var1/var2</span></code> after a code to fill in variables on the fly.
       </div>
 
-      <div class="modal-foot">
-        <label class="dont-show">
-          <input type="checkbox" id="hiw-dont-show">
-          Don't show this again
-        </label>
-        <button type="button" id="hiw-got-it">Got it</button>
-      </div>
-    </dialog>
-  </main>
+      <label class="dont-show md-typescale-body-medium">
+        <md-checkbox id="hiw-dont-show" touch-target="wrapper"></md-checkbox>
+        Don't show this again
+      </label>
+    </form>
+
+    <div slot="actions">
+      <md-filled-button id="hiw-got-it" form="hiw-form" value="ok">Got it</md-filled-button>
+    </div>
+  </md-dialog>
 
   <script src="manage.js"></script>
 </body>

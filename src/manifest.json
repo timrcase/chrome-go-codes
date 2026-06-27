@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Go Codes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Omnibox shortcodes for URLs, synced via Chrome.",
   "permissions": ["storage"],
   "omnibox": { "keyword": "go" },
@@ -19,5 +19,6 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtHlQ+NSP6hIJjdnj0540l/7uSNwYWds1ZTXyryirgRr86gcbl9djUrTfBnYu7t7r3BbHyHWa+oGV+6BaFJPzUsgHIOcZwDFMYoAnAXZVYTQtrQeitIiJfJWllF5piJK+CtxGX1qQspW2gBXeltx+061ZoGEhRb/NiFl9i+6xJ33VI3Lpa8GFCKuiCnUk30SD1VAAtpnRQIC9+RQbI9ouNJRhMXflXdehtNROMOLlSCshJboJWv0XvbddMtW+m4bks/DMpBgD7ALTj4PyufUBw6TE/9wHrSexMiB9AlVAwlaxfFdgSbk26rWDsy/qeQ4WF3Pl6Ldg9T+5kDrOZ3u60wIDAQAB"
 }
